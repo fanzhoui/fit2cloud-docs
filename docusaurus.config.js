@@ -48,6 +48,7 @@ const config = {
     'maxkb_versioned_docs/version-v1/static',
     'cordys-docs/static',
     'ai-gateway-docs/static',
+    'halo-docs/static',
   ],
 
   // 客户端模块: 路由更新时给 <html data-docs-product> 打上当前产品标记,
@@ -215,6 +216,29 @@ const config = {
         // 版本化: current = v1, 暂无历史版本(若不声明 versions, Docusaurus 默认
         // 当前版本名为 "current"/标签 "next", 侧栏版本控件会显示 next)。
         // 统一声明为 v1, 与 SQLBot/Cordys 等单版本产品一致。
+        lastVersion: 'current',
+        versions: {
+          current: { label: 'v1', badge: false, banner: 'none' },
+        },
+      },
+    ],
+    // Halo 官方文档(从 halo-dev/docs 的 Rspress 迁移), namespace=halo
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'halo',
+        path: 'halo-docs',
+        routeBasePath: 'halo',
+        sidebarPath: 'halo-docs/sidebars.js',
+        // Rspress 的 `_` 前缀片段(_XxxVo.md / _docker-*.md)作为 MDX 组件被父页 import,
+        // 不应独立成路由, 用 Docusaurus 默认 exclude 排除即可。
+        exclude: [
+          '**/_*.{js,jsx,ts,tsx,md,mdx}',
+          '**/_*/**',
+          '**/*.test.{js,jsx,ts,tsx}',
+          '**/__tests__/**',
+        ],
+        // 版本化: current = v1, 暂无历史版本(同 SQLBot/Cordys)
         lastVersion: 'current',
         versions: {
           current: { label: 'v1', badge: false, banner: 'none' },

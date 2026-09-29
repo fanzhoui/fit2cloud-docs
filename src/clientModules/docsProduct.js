@@ -13,6 +13,8 @@ function setDocsProduct(pathname) {
     product = 'dataease';
   } else if (p.includes('/cordys')) {
     product = 'cordys';
+  } else if (p.includes('/halo')) {
+    product = 'halo';
   }
   if (typeof document === 'undefined') {
     return;

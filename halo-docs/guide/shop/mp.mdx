@@ -1,0 +1,44 @@
+---
+title: 小程序
+description: Halo 商城小程序的获取、配置与发布说明。
+---
+
+自 Halo 2.24 起，Halo 商城支持以微信小程序作为销售终端。相较于 Web 端，小程序在国内拥有更高的用户渗透率，更适合承载移动端购物场景。
+
+<img src="/img/halo/user-guide/shop/mp-preview.png" alt="小程序预览" width="50%" />
+
+## 获取方式
+
+Halo 官方目前以源码形式提供小程序模板，你需要自行编译，并通过微信开发者工具完成发布。
+
+- 源码仓库：[lxware-dev/halo-shop-miniprogram](https://github.com/lxware-dev/halo-shop-miniprogram)
+- 在线文档：[小程序配置与发布文档](https://github.com/lxware-dev/halo-shop-miniprogram/tree/main/docs)
+
+## 使用流程
+
+:::info Fork 后再修改
+为了便于后续同步官方更新，建议先将仓库 Fork 到自己的 GitHub 账户，再克隆到本地进行配置、编译和发布。
+:::
+
+```bash
+git clone https://github.com/{your-github-username}/halo-shop-miniprogram.git
+```
+
+克隆完成后，请阅读源码仓库中的 `docs` 目录，其中包含完整的小程序配置、编译与发布说明，可按文档完成后续操作。
+
+## 在 Halo 中配置
+
+进入 **商店 -> 设置 -> 小程序**，完成以下配置：
+
+1. 启用微信小程序登录，填写小程序 App ID，并在 Secret 字段中保存 App Secret。
+2. 按需添加首页轮播图。每张轮播图可以设置标题、描述、图片、优先级，以及不跳转、跳转到产品或跳转到分类。
+3. 按需添加快捷入口。每个入口可以设置标题、图片、优先级，以及不跳转、跳转到产品或跳转到分类。
+4. 保存设置。
+
+App ID 和 App Secret 必须与编译、发布小程序时使用的微信小程序一致。App Secret 属于敏感凭证，不要写入小程序源码或公开仓库。
+
+## 配置支付渠道
+
+1. 在[支付方式](./payments.mdx)中创建支持小程序场景的支付方式。
+2. 在[销售渠道](./sales-channels.mdx)中创建编码为 **小程序（MINI_PROGRAM）** 的渠道，并绑定该支付方式。
+3. 从已发布的小程序创建测试订单，验证登录、下单和支付流程。

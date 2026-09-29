@@ -1,0 +1,54 @@
+[
+  {
+    "type": "section-header",
+    "label": "开始开发"
+  },
+  "prepare",
+  "ai",
+  "structure",
+  "config",
+  {
+    "type": "section-header",
+    "label": "模板与数据"
+  },
+  "thymeleaf",
+  "static-resources",
+  "settings",
+  "extension-resources",
+  "i18n",
+  "template-route-mapping",
+  "global-variables",
+  {
+    "type": "dir",
+    "name": "template-variables",
+    "label": "页面模板与变量",
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "finder-apis",
+    "label": "Finder API",
+    "collapsed": true
+  },
+  "template-tag",
+  "annotations",
+  {
+    "type": "section-header",
+    "label": "集成与工程化"
+  },
+  "vite",
+  "plugin-integration",
+  "page-layout",
+  "ui-plugin",
+  {
+    "type": "section-header",
+    "label": "质量与发布"
+  },
+  "testing",
+  "image-optimization",
+  "performance",
+  "seo",
+  "packaging",
+  "release-checklist",
+  "api-changelog"
+]

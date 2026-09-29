@@ -25,6 +25,7 @@ const DOCS_PRODUCTS = sortProducts([
   {name: '1Panel 面板', id: '1panel', routeBasePath: '1panel'},
   {name: '1Panel AI 网关', id: 'ai-gateway', routeBasePath: 'ai-gateway'},
   {name: 'JumpServer 堡垒机', id: 'jumpserver', routeBasePath: 'jumpserver'},
+  {name: 'Halo 建站工具', id: 'halo', routeBasePath: 'halo'},
   {name: 'MaxKB 智能体平台', id: 'maxkb', routeBasePath: 'maxkb'},
   {name: 'DataEase BI 工具', id: 'dataease', routeBasePath: 'dataease'},
   {name: 'SQLBot 智能问数', id: 'sqlbot', routeBasePath: 'sqlbot'},

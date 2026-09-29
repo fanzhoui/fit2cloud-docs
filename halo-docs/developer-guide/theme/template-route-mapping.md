@@ -1,0 +1,102 @@
+---
+title: 模板路由
+description: 了解 Halo 内置首页、文章、页面、归档、分类、标签和作者模板的默认路由与分页规则，并通过 theme.yaml 为文章、页面和分类声明自定义模板。
+---
+
+此文档讲解系统内部提供的路由与模板映射。
+
+下方列出默认访问路径。用户可以在 Console 的系统设置中修改文章、分类和标签等路由规则，主题不应硬编码这些地址，应优先使用模板变量中的 `status.permalink` 和分页 URL。
+
+## 主要模板
+
+### index.html
+
+站点的首页模板，访问地址包括：
+
+- `/`
+- `/index`
+- `/page/:page`
+- `/index/page/:page`
+
+### post.html
+
+文章详情页面的模板，访问地址默认为 `/archives/:slug`。
+
+### page.html
+
+独立页面详情的模板，访问地址默认为 `/:slug`。
+
+### archives.html
+
+文章归档页面的模板，访问地址包括：
+
+- `/archives`
+- `/archives/page/:page`
+- `/archives/:year`
+- `/archives/:year/page/:page`
+- `/archives/:year/:month`
+- `/archives/:year/:month/page/:page`
+
+其中 `year` 必须为 4 位数字，`month` 必须为 2 位数字，不符合格式的路径不会被匹配。
+
+### tags.html
+
+标签集合页面的模板，访问地址默认为 `/tags`。
+
+### tag.html
+
+标签归档页面的模板，访问地址默认为 `/tags/:slug`，分页地址为 `/tags/:slug/page/:page`。
+
+### categories.html
+
+分类集合页面的模板，访问地址默认为 `/categories`。
+
+### category.html
+
+分类归档页面的模板，访问地址默认为 `/categories/:slug`，分页地址为 `/categories/:slug/page/:page`。
+
+### author.html
+
+作者归档页面的模板，访问地址默认为 `/authors/:name`，分页地址为 `/authors/:name/page/:page`。页面变量请参考[作者归档](./template-variables/author.mdx)。
+
+## 自定义模板 {/* #custom-templates */}
+一般情况下，上文提到的模板已经能够满足大部分的需求，但如果需要针对某个特定的页面进行自定义，可以通过自定义模板来实现。目前系统支持为 **文章**、**独立页面**和**分类归档** 设置自定义模板：
+
+在 `theme.yaml` 的 `spec` 节点下添加如下配置：
+
+```yaml
+customTemplates:
+  {type}:
+    - name: {name}
+      description: {description}
+      screenshot: {screenshot}
+      file: {file}.html
+```
+
+示例：
+
+```yaml
+customTemplates:
+  post:
+    - name: 文档
+      description: 文档类型的文章
+      screenshot:
+      file: post_documentation.html
+```
+
+字段说明：
+
+- `type`：模板类型，目前支持 `post` `page` `category`。
+- `name`：模板名称
+- `description`：模板描述
+- `screenshot`：模板预览图
+- `file`：模板文件名，需要在 `/templates/` 目录下创建
+
+最终使用者即可在文章设置、独立页面设置、分类设置中选择自定义模板。
+
+:::info 自定义模板要求
+
+1. 自定义模板与默认模板的功能相同，区别仅在于可以让使用者选择不同于默认模板风格的模板。
+2. 自定义模板的文件名需要以 `.html` 结尾，且需要在 `/templates/` 目录下创建。
+
+:::
