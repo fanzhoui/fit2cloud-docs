@@ -27,7 +27,7 @@
   justify-content: space-between;
   padding: 8px 12px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400; /* 与侧栏菜单统一细体，不加粗 */
   color: #1b1b1d;
   background: transparent;
   border: 0;

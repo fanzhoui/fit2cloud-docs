@@ -394,7 +394,10 @@ aside.theme-doc-sidebar-container {
     justify-content: center;
   }
 
-  /* 侧栏菜单字体参考 docs.halo.run: 普通项 14px/400、分类标题 500、激活项 600, 行高 24px */
+  /* 侧栏菜单字体统一细体(400)：分类标题不再用 500 加粗、当前项不再用 600 加粗。
+     原因(2026-09-22)：macOS 会为 500 取到 PingFang SC 的真 Medium 字形，分类标题
+     看起来被加粗；而 Windows 的微软雅黑没有 Medium 档、会落回 Regular，两端观感不一致。
+     统一到 400 后两端都落到各自的正文字形，分类/当前项的层级改由缩进 + 蓝色高亮体现。 */
   .theme-doc-sidebar-container .menu__link {
     font-size: 14px;
     font-weight: 400;
@@ -402,10 +405,10 @@ aside.theme-doc-sidebar-container {
     color: #1b1b1d;
   }
   .theme-doc-sidebar-container .menu__list-item-collapsible > .menu__link {
-    font-weight: 500;   /* 分类标题稍粗 */
+    font-weight: 400;   /* 分类标题：与普通项同为细体 */
   }
   .theme-doc-sidebar-container .menu__link--active {
-    font-weight: 600;   /* 当前项加粗 */
+    font-weight: 400;   /* 当前项：靠浅蓝底 + 蓝字区分，不再加粗 */
   }
   /* 侧栏菜单项 hover / 选中项: 背景改为主页浅蓝、文字改浅蓝 */
   .theme-doc-sidebar-container .menu__link:hover,
