@@ -37,7 +37,7 @@ const SCRIPT_ID = 'maxkb-embed-script';
  *    先例: Cordys CRM 官方文档即用同一机制, 在嵌入脚本 src 上追加 ak / sk / asker。
  * ------------------------------------------------------------------ */
 const PRODUCT_PARAM = 'product';
-// 传参范围: 与 docusaurus.config.js 中挂了文档插件的产品一一对应(共 7 个),
+// 传参范围: 与 docusaurus.config.js 中挂了文档插件的产品一一对应(共 8 个),
 // 首页及非产品页面(如 /docs/)不带该参数。
 // 匹配产品在**路径段**上的位置, 兼容 i18n 的 /en/ 前缀(如 /en/jumpserver/...),
 // 同时避免 /jumpserverfoo 这类误命中。
@@ -50,6 +50,7 @@ const PRODUCT_IDS = [
   'sqlbot',
   'cordys',
   'ai-gateway',
+  'halo',
 ];
 const PRODUCT_RE = new RegExp(`(?:^|/)(${PRODUCT_IDS.join('|')})(?:/|$)`);
 
