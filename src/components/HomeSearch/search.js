@@ -13,7 +13,9 @@ export const PRODUCT_BY_ROUTE = {
   jumpserver: 'JumpServer',
   dataease: 'DataEase',
   maxkb: 'MaxKB',
+  cordys: 'Cordys CRM',
   'ai-gateway': '1Panel AI 网关',
+  halo: 'Halo',
   docs: '文档中心',
 };
 
