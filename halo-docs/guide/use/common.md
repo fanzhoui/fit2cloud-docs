@@ -29,7 +29,7 @@ Halo 的注册地址为 `/signup`，需要注意的是，Halo 默认不会开启
 
 Console 控制台是一个 Halo 站点的后台管理系统，只有具有权限的登录用户才可以正常使用控制台功能。你可以在控制台中管理站点中的文章、页面、附件等各种内容，调整站点使用的主题或各种设置，访问地址为 `/console`。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/common/控制台界面说明.png" alt="图 3  控制台界面说明" />
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/common/console-overview.png" alt="图 3  控制台界面说明" />
 <div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 3  控制台界面说明</div>
 
 1. **全局搜索框**：点击或通过快捷键 `Ctrl+K` 可以呼出全局搜索框，输入关键字可以在所有文章、页面、附件、用户及设置项等所有内容中进行全局搜索。

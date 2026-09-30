@@ -15,8 +15,8 @@ description: Halo 付费版许可证购买、部署与激活流程，含专业�
 
 在凌霞官网购买产品后，可以在 `个人中心` > `我的许可证` ，统一管理当前账户下的全部已购产品的许可证。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses.png" alt="图 1  许可证列表.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 1  许可证列表.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses.png" alt="图 1  许可证列表" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 1  许可证列表</div>
 
 ## 部署 Halo 付费版
 
@@ -30,46 +30,46 @@ description: Halo 付费版许可证购买、部署与激活流程，含专业�
 
 部署成功后，访问 `控制台` > `概览`，可以查看 Halo 版本信息，目前还处于未激活状态，需要按照后续步骤进行激活。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-activate.png" alt="图 2  未激活状态.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 2  未激活状态.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-activate.png" alt="图 2  未激活状态" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 2  未激活状态</div>
 
 ## 查看已购产品许可证
 
 登录到凌霞官网的 [订单列表](https://lxware.cn/uc/cloud/order)，点击已完成订单条目右侧的更多按钮，点击「许可证列表」，即可跳转至 `我的许可证` 列表，可以查看该订单所购产品的许可证。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses.png" alt="图 3  查看订单许可证.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 3  查看订单许可证.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses.png" alt="图 3  查看订单许可证" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 3  查看订单许可证</div>
 
 ## 下载许可证
 
 在 `我的许可证`列表，点击许可证条目右侧的更多按钮，点击「详情」；
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses-operation-detail.png" alt="图 4  查看许可证详情.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 4  查看许可证详情.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-licenses-operation-detail.png" alt="图 4  查看许可证详情" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 4  查看许可证详情</div>
 
 在详情页下载许可证文件，同时支持兑换包含在产品许可证内的免赠权益。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-license-detail.png" alt="图 5  下载许可证.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 5  下载许可证.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/lxware-license-detail.png" alt="图 5  下载许可证" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 5  下载许可证</div>
 
 ## 激活许可证
 
 进入 `控制台` > `概览`，导入下载的许可证文件。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-import-license.png" alt="图 6  导入许可证.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 6  导入许可证.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-import-license.png" alt="图 6  导入许可证" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 6  导入许可证</div>
 
 导入完成后，可以查看到更新的版本信息。许可证显示为「有效」即为激活成功，到此即可正常使用 Halo 付费版。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-activated.png" alt="图 7  激活成功.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 7  激活成功.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-activated.png" alt="图 7  激活成功" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 7  激活成功</div>
 
 ## 取消激活许可证
 
 你可以随时在当前应用中取消激活许可证，取消后付费版功能将会受限。在许可证有效期内，许可证可被重新激活至其他设备中。
 
-<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-deactivate.png" alt="图 8  取消激活.png" />
-<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 8  取消激活.png</div>
+<img style={{display:"block",margin:"16px auto",maxWidth:"100%"}} src="/img/halo/user-guide/activate/overview-deactivate.png" alt="图 8  取消激活" />
+<div style={{textAlign:"center",color:"#8a8f99",fontSize:"13px",margin:"6px 0 20px"}}>图 8  取消激活</div>
 
 ## 使用增值权益
 
