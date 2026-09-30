@@ -777,9 +777,14 @@ body.search-page [class*='navbar-search-home'] {
    2) 必须 !important —— 拖拽时 embed.js 会把 inline 的 width/height 设成图片的
       naturalWidth/naturalHeight(230px), 只有 !important 能压过 inline 样式,
       否则用户拖一下图标就弹回原大小。
-   3) 拖拽定位偏移仍按图片原始尺寸计算(embed.js 用 naturalWidth/2 当抓取偏移),
-      所以拖动时图标相对光标会有约 90px 的错位; 不拖拽则无影响。
-      要彻底消除这个错位, 得换一张原始尺寸就小的图标(MaxKB 控制台 → 显示设置 → 悬浮头像)。
+   3) 拖拽定位偏移:
+      - 桌面: embed.js 原生 drag 按 naturalWidth/2(125px) 算抓取偏移并把 inline 宽高
+        设成 250px。我们 !important 压回 62px 后, 图标左上角落在「触点 - 125px」处,
+        光标/触点与图标中心相差约 94px —— 即"拖动时阴影和鼠标不在同一位置"。
+        修正逻辑在 src/clientModules/maxkbEmbed.js 的 guardDesktopDrag
+        (站点侧监听 drag 事件重新居中, 不动 MaxKB 服务端)。
+      - 移动端: touch 拖拽整体由同文件 guardTouchDrag 接管
+        (阈值判定 + 按 62px 显示尺寸跟手), 不经过这里。
    浮窗位置(right/bottom 的偏移量)不在这里改, 那由 MaxKB 控制台的「位置」设置决定。 */
 [id^="maxkb-"] .maxkb-chat-button {
   width: 62px !important;

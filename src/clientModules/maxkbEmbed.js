@@ -155,6 +155,145 @@ function removeMaxkbEmbed() {
   }
 }
 
+/* ------------------------------------------------------------------
+ * 移动端: 屏蔽 embed.js 的 touch 拖拽, 换成我们自己的「阈值判定」拖拽。
+ *
+ * 根因(2026-09-30 真机复现): embed.js 给浮窗图标绑了 touchstart/touchmove 做拖拽
+ * (桌面只绑 drag 系列, 所以电脑上正常)。它的 drag() 处理函数在 touchstart 那一刻
+ * 就把图标 inline 样式改成
+ *   top/left = 触点坐标 - naturalWidth/2,  width/height = naturalWidth(250px)
+ * 没有任何「移动超过阈值才算拖拽」的判断, 于是手机浏览器按下→抬起之间的微抖动
+ * 就足以让图标从右下角瞬移到触点左上 ~125px 处(即「往左上方瞬移」), touchend
+ * 落点脱离图标, 浏览器不再合成 click → 对话框打不开; 再点再跳一次。
+ * 我们 custom.css 里 62px !important 只压住了显示尺寸, 压不住 JS 用 250 计算的偏移。
+ *
+ * 修法: 捕获阶段 stopImmediatePropagation 拦掉 embed.js 的两个监听(它注册在冒泡阶段),
+ * 然后由 guardTouchDrag 自己实现一套正常的触摸交互:
+ *   - 手指移动 < 10px  → 视为点击: 图标纹丝不动, 默认行为(合成 click)照常打开对话框;
+ *   - 手指移动 ≥ 10px → 视为拖拽: 图标跟随手指, 按 62px 显示尺寸居中于触点,
+ *     并 clamp 在视口内; touchmove 里 preventDefault 抑制页面滚动,
+ *     拖拽结束时再 preventDefault touchend 阻止 click 合成(松手不误开对话框)。
+ *     (preventDefault 能阻断 click 合成, 已在 Chromium 真机验证。)
+ * 桌面端 touch 事件不存在, 原生 drag 拖拽原样保留。
+ *
+ * 时机: embed.js 在 window load 时挂浮窗, 用 MutationObserver 盯 body 直接子节点,
+ * 图标一出现就装守卫; 路由切换重建浮窗(removeMaxkbEmbed → 重新注入)时同样命中。
+ * 守卫随图标 DOM 一起被销毁, 无需注销。
+ * ------------------------------------------------------------------ */
+// 判定「拖拽 vs 点击」的移动阈值(px): 小于它视为手指抖动, 走点击
+const DRAG_THRESHOLD = 10;
+
+function guardTouchDrag(button) {
+  // 图标显示尺寸与 custom.css 的 62px !important 对应;
+  // embed.js 用 naturalWidth(250) 算抓取偏移才导致瞬移, 我们按真实显示尺寸算。
+  const SIZE = 62;
+  const MARGIN = 8; // 拖拽时距视口边缘的最小间距
+  let startX = 0;
+  let startY = 0;
+  let dragging = false;
+
+  const block = (e) => e.stopImmediatePropagation();
+  button.addEventListener(
+    'touchstart',
+    (e) => {
+      block(e);
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      dragging = false;
+    },
+    {capture: true},
+  );
+  button.addEventListener(
+    'touchmove',
+    (e) => {
+      block(e);
+      const t = e.touches[0];
+      if (!dragging && Math.hypot(t.clientX - startX, t.clientY - startY) < DRAG_THRESHOLD) {
+        return; // 还在阈值内: 不 preventDefault, 保留页面滚动与 click 合成
+      }
+      dragging = true;
+      e.preventDefault(); // 拖拽中: 抑制页面跟随滚动
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const left = Math.min(Math.max(t.clientX - SIZE / 2, MARGIN), vw - SIZE - MARGIN);
+      const top = Math.min(Math.max(t.clientY - SIZE / 2, MARGIN), vh - SIZE - MARGIN);
+      // right/bottom 与 top/left 同时存在时浏览器会忽略 right/bottom, 无需显式清除
+      button.style.left = `${left}px`;
+      button.style.top = `${top}px`;
+    },
+    {capture: true},
+  );
+  button.addEventListener(
+    'touchend',
+    (e) => {
+      block(e);
+      if (dragging) {
+        // 刚完成一次拖拽: 阻止浏览器合成 click, 否则松手瞬间会误开对话框
+        e.preventDefault();
+        dragging = false;
+      }
+    },
+    {capture: true},
+  );
+}
+
+function guardMobileDrag(root) {
+  const button = root.querySelector('.maxkb-chat-button');
+  if (!button || button.dataset.touchGuarded) {
+    return;
+  }
+  button.dataset.touchGuarded = '1';
+  guardTouchDrag(button);
+}
+
+/* ------------------------------------------------------------------
+ * 桌面端拖拽修正: 消除「拖动时图标(阴影)和鼠标不在同一位置」。
+ *
+ * 根因: 图标原图 250x250, 被 custom.css 的 62px !important 压小显示。embed.js 的
+ * 原生 drag 处理不知道这件事, 仍按 naturalWidth/2(125px) 当抓取偏移, 并把 inline
+ * 宽高设回 250px —— 于是图标左上角落在「光标 - 125px」处, 而显示只有 62px,
+ * 光标总在图标右下方约 94px 处, 拖起来就是阴影跟鼠标分离。
+ * (已实测: 浏览器按 computed 62px 渲染 inline width:250px 的盒子, 偏移完全吻合。)
+ *
+ * 修法: 在 document 冒泡阶段监听 drag/dragend —— embed.js 的监听注册在图标上,
+ * 事件冒泡到 document 时它已算完, 我们再把图标纠正为「光标 - 显示尺寸/2」,
+ * 图标中心就始终跟住光标; 顺带删掉它写的 250px inline 宽高(反正被 !important 压着)。
+ * 用 document 级委托 + closest 判定, 浮窗重建/多实例都天然覆盖, 无需按图标注册。
+ * ------------------------------------------------------------------ */
+const BUTTON_SIZE = 62; // 与 custom.css 的 .maxkb-chat-button 62px !important 对应
+
+function recenterDraggedButton(e) {
+  const button =
+    e.target && e.target.closest && e.target.closest('.maxkb-chat-button');
+  if (!button) {
+    return;
+  }
+  button.style.removeProperty('width');
+  button.style.removeProperty('height');
+  button.style.left = `${e.clientX - BUTTON_SIZE / 2}px`;
+  button.style.top = `${e.clientY - BUTTON_SIZE / 2}px`;
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('drag', recenterDraggedButton);
+  document.addEventListener('dragend', recenterDraggedButton);
+}
+
+function watchForChatButton() {
+  const tryGuard = () => {
+    document.querySelectorAll('[id^="maxkb-"]:not(script)').forEach((el) => guardMobileDrag(el));
+    return Boolean(document.querySelector('.maxkb-chat-button'));
+  };
+  if (tryGuard()) {
+    return;
+  }
+  const observer = new MutationObserver(tryGuard);
+  observer.observe(document.body, {childList: true});
+  // embed.js 始终没能挂出浮窗(被插件拦截/服务端异常)时停止观察, 避免 observer 永久空转。
+  setTimeout(() => observer.disconnect(), 30000);
+}
+
 function loadMaxkbEmbed(attempt = 0, product = '', version = '') {
   if (document.getElementById(SCRIPT_ID)) {
     return;
@@ -194,6 +333,8 @@ function loadMaxkbEmbed(attempt = 0, product = '', version = '') {
   script.onload = () => {
     executed = true;
     replayIfMissing();
+    // 浮窗图标出现后给移动端装拖拽守卫(见 guardMobileDrag 注释)。
+    watchForChatButton();
     // 兜底复查: 此刻 window load 必已发生(naturalLoaded 为 true), 若浮窗仍没挂出来,
     // 可能只是上一轮时机没对上, 再补发一次(浮窗不存在时补发是安全的)。
     setTimeout(() => {
