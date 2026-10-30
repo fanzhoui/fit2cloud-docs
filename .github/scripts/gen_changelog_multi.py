@@ -51,6 +51,8 @@ TZ = timezone(timedelta(hours=8))
 #   date_style          日期格式: 'plain'(2026年9月24日) | 'spaced'(2026 年 9 月 24 日)
 #   title_date_blank    版本标题与日期之间是否空一行
 #   bullet              条目前缀
+#   paragraph_items     仅 source='ul' 生效：分组内没有 <li> 时，把 <p>/<blockquote>
+#                       段落也作为条目（用于纯段落结构的发布说明，目前仅 cordys）
 #   strip_trailing      是否去掉条目结尾的「；;。.」
 #   quote_normalize     是否把「」替换为“”（cordys 文档风格）
 #   groups              API 小标题 -> 文档分组标题。按顺序匹配，先命中者胜；
@@ -137,6 +139,7 @@ PRODUCTS = {
         'targets': {},
         'default_target': 'cordys-docs/changelog.md',
         'source': 'ul',
+        'paragraph_items': True,
         'date_style': 'plain',
         'title_date_blank': True,
         'bullet': '- ',
@@ -176,6 +179,7 @@ HEAD = re.compile(r'<(h[1-4])[^>]*>(?:<a[^>]*></a>)?(.*?)</\1>', re.S)
 A_TAG = re.compile(r'<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>', re.S)
 LI = re.compile(r'<li[^>]*>(.*?)</li>', re.S)
 P = re.compile(r'<p[^>]*>(.*?)</p>', re.S)
+BLOCKQUOTE = re.compile(r'<blockquote[^>]*>(.*?)</blockquote>', re.S)
 BR = re.compile(r'<br\s*/?>', re.I)
 EMOJI = re.compile(r'[\u2190-\u27BF\u2B00-\u2BFF\uFE0F\U0001F000-\U0001FAFF]')
 NUM_PREFIX = re.compile(r'^\s*[\d.]+\s*')
@@ -296,11 +300,24 @@ def split_sections(note: str):
     return out
 
 
-def parse_ul(note: str):
-    """h*/ul/li 结构（dataease / 1panel / sqlbot / cordys）。"""
+def parse_ul(note: str, cfg: dict | None = None):
+    """h*/ul/li 结构（dataease / 1panel / sqlbot / cordys）。
+
+    cfg['paragraph_items'] 为真时（目前仅 cordys 开启），分组内没有 <li> 的
+    <p> / <blockquote> 段落也按条目收下：发布说明里会出现只有一段正文、
+    没有列表的结构（如 v1.9.5 的 OpenJDK 安全公告），只用 LI 会解析为空。
+    """
+    allow_p = bool((cfg or {}).get('paragraph_items'))
     sections = []
     for title, body in split_sections(note):
         items = [t for t in (flatten(li) for li in LI.findall(body)) if t]
+        if not items and allow_p:
+            # <blockquote> 内常含 <p>，先按区间排除，避免同一段落被收两次
+            quoted = [(m.start(), m.end()) for m in BLOCKQUOTE.finditer(body)]
+            in_quote = lambda pos: any(s <= pos < e for s, e in quoted)
+            items = [t for t in (flatten(m.group(0)) for m in P.finditer(body)
+                                 if not in_quote(m.start())) if t]
+            items += [t for t in (flatten(b) for b in BLOCKQUOTE.findall(body)) if t]
         if items:
             sections.append((title, items))
     return sections
@@ -603,7 +620,7 @@ def main() -> int:
     dt = datetime.fromtimestamp(ts / 1000, tz=TZ) if ts else datetime.now(tz=TZ)
     note = rel.get('releaseNoteH') or ''
     parser = PARSE_BY_SOURCE.get(cfg['source'], parse_ul)
-    sections = parser(note)
+    sections = parser(note, cfg)
     if not sections:
         print(f'Empty release notes for {target}', file=sys.stderr)
         return 1
